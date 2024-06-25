@@ -10,7 +10,7 @@ Run npm i inquirer@8.2.4 and npm i dotenv and npm i pg to run be able to run thi
 
 ## Usage
 
-Watch this [video]()
+Watch this [video](https://drive.google.com/file/d/1NNhM5XY418lVOBRSvEOM4JVo6sM1J5Br/view)
 
 ## Credits 
 
@@ -44,4 +44,4 @@ SOFTWARE.
 
 ## Link
 
-Video [Link]()
+Video [Link](https://drive.google.com/file/d/1NNhM5XY418lVOBRSvEOM4JVo6sM1J5Br/view)

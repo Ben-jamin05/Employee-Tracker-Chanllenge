@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const queries = require('./queryHandler.js');
 
 async function addDepartmentinq() {
-    inquirer
+    const data = await inquirer
         .prompt([
             {
                 type: 'input',
@@ -10,11 +10,9 @@ async function addDepartmentinq() {
                 name: "newDep",
             },
         ])
-        .then( async (data) => {
-            //console.log(data);
-            let newDepartment = data.newDep;
-            let newDepQuery = await queries.addDepartment(newDepartment);
-        });
+        //console.log(data);
+        let newDepartment = data.newDep;
+        let newDepQuery = await queries.addDepartment(newDepartment);
     }
 
 async function addRoleinq() {
