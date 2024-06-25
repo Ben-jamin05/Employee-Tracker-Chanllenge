@@ -11,6 +11,7 @@ async function addDepartmentinq() {
             },
         ])
         .then((data) => {
+            //console.log(data);
             newDepartment = data.newDep;
             queries.addDepartment(newDepartment);
         });
@@ -38,36 +39,79 @@ async function addRoleinq() {
             },
         ])
         .then((data) => {
-            console.log(data);
+            //console.log(data);
+            newRole = [data.newRol, data.rolSalary, data.rolDep];
+            queries.addRole(newRole);
+        });
+    }
+
+async function updateEmpRole() {
+    let roleList = await queries.displayRoles();
+    let empList = await queries.getEmployeesNames();
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                message: "Which employee's role do you want to update?", 
+                name: "empName",
+                choices: empList,
+            },
+            {
+                type: 'list',
+                message: "Which role do you want to assign the selected employee?", 
+                name: "newRole",
+                choices: roleList,
+            },
+        ])
+        .then((data) => {
+            //console.log(data);
+            // do something with name and roll pls
+            let empID = 0;
+            let empRoleID = 0;
+            updatedEmp = [empID, empRoleID];
+            queries.updateEmpRole(updatedEmp);
         });
     }
 
 async function addEmployeeinq() {
+    let roleList = await queries.displayRoles();
+    let managerList = await queries.managerList();
+    managerList.unshift('None');
     inquirer
         .prompt([
             {
                 type: 'input',
-                message: "?", 
-                name: "newRol",
+                message: "What is the employees first name?", 
+                name: "empFirst",
             },
             {
                 type: 'input',
-                message: "", 
-                name: "rolSalary",
+                message: "What is the employees last name?", 
+                name: "empLast",
             },
             {
                 type: 'list',
-                message: "?", 
-                name: "rolDep",
-                choices: departmentList,
+                message: "What is the employees role?", 
+                name: "empRole",
+                choices: roleList,
+            },
+            {
+                type: 'list',
+                message: "Who is the employees manager?", 
+                name: "empManager",
+                choices: managerList,
             },
         ])
         .then((data) => {
-            console.log(data);
+            //console.log(data);
+            // do something with data.empManager for manager id
+            let manager_id = NULL;
+            newEmployee = [data.empFirst, data.empLast, data.empRole, manager_id];
+            queries.updateEmpRole(updatedEmp);
         });
     }
+    
 
-//addDepartmentinq();
-//addRoleinq();
-
-module.exports = {addDepartmentinq, addRoleinq};
+module.exports = {addDepartmentinq, addRoleinq, addEmployeeinq,
+updateEmpRole
+};

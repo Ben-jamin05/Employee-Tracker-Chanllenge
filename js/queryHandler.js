@@ -11,18 +11,25 @@ const pool = new Pool(
     console.log("Connected to the employee_db database!")
 );
 
-//const client = pool.connect();
 
 async function displayEmployees() {
     const res = await pool.query('SELECT * FROM employee');
-    //console.log(res.rows);
+    return res.rows;
+}
+
+async function getEmployeesNames() {
+    const res = await pool.query('SELECT first_name, last_name FROM employee');
     return res.rows;
 }
 
 async function displayRoles() {
-    const res = await pool.query('SELECT * FROM role');
-    //console.log(res.rows);
-    return res.rows;
+    const res = await pool.query('SELECT title FROM role');
+    let rolList = [];
+    for (let i = 0;  i < res.rows.length; i++) {
+        rolList.push(res.rows[i].title);
+    }
+    //console.log(rolList);
+    return rolList;
 }
 
 async function displayDepartments() {
@@ -31,24 +38,23 @@ async function displayDepartments() {
     for (let i = 0;  i < res.rows.length; i++) {
         depList.push(res.rows[i].name);
     }
-    //console.log(depList);
     return depList;
 }
 
 async function addEmployee(data) {
     const text = 'INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES($1, $2, $3, $4)';
-    const values = [data]; //need to convert data into list once I figure out syntax and what I need
-    const res = await pool.query(text, values);
-    console.log(res)
-    //return res;
+    const values = [data];
+    const res = await pool.query(text, data);
+    //console.log(res)
+    return res;
 }
 
 async function addRole(data) {
-    const text = 'INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES($1, $2, $3, $4)';
-    const values = [data]; //need to convert data into list once I figure out syntax and what I need
-    const res = await pool.query(text, values);
-    console.log(res)
-    //return res;
+    const text = 'INSERT INTO role(title, salary, department_id) VALUES($1, $2, $3)';
+    const values = [data];
+    const res = await pool.query(text, data);
+    //console.log(res)
+    return res;
 }
 
 async function addDepartment(data) {
@@ -59,7 +65,21 @@ async function addDepartment(data) {
     return res;
 }
 
-//displayDepartments();
+async function managerList() {
+    const res = await pool.query('SELECT first_name, last_name FROM employee WHERE manager_id = NULL');
+    return res.rows;
+}
+
+async function updateEmpRole(data) {
+    const text = 'UPDATE employee SET role_id = $2 WHERE id = $1';
+    const values = [data];
+    const res = await pool.query(text, data);
+    //console.log(res)
+    return res;
+}
 
 
-module.exports = {displayEmployees, displayRoles, displayDepartments, addDepartment}
+module.exports = {displayEmployees, displayRoles, displayDepartments,
+addDepartment, managerList, getEmployeesNames, addEmployee,
+addRole, updateEmpRole
+};

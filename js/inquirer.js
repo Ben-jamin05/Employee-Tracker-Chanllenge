@@ -8,8 +8,6 @@ const userOptions = ['View All Employees',
 'View all Departments', 'Add Department',
 'Exit'];
 
-//recusivly call menu if needed?
-
 async function menu() {
     inquirer
         .prompt([
@@ -30,34 +28,45 @@ async function menu() {
             },
         ])
         .then( async (data) => {
-            console.log(data);
+            //console.log(data);
             switch (data.userChoice) {
                 case userOptions[0]:
-                    let info = await queries.displayEmployees();
-                    console.table(info);
+                    let empDisplayInfo = await queries.displayEmployees();
+                    console.table(empDisplayInfo);
                     menu();
-                    //return true;
+                    break;
                 case userOptions[1]:
-                    return console.log(data);
+                    let addedEmp = await furtherQuestions.addEmployeeinq();
+                    console.log("Employee Added");
+                    menu();
                     break;
                 case userOptions[2]:
-                    return console.log(data);
+                    let empUpdate = await furtherQuestions.updateEmpRole();
+                    console.log("Employee Role Updated");
+                    menu();
                     break;
                 case userOptions[3]:
-                    queries.displayRoles();
+                    let roleDisplayInfo = await queries.displayRoles();
+                    console.table(roleDisplayInfo);
+                    menu();
                     break;
                 case userOptions[4]:
-                    furtherQuestions.addRoleinq();
+                    let addedRole = await furtherQuestions.addRoleinq();
+                    console.log("Role Added");
+                    menu();
                     break;
                 case userOptions[5]:
-                    queries.displayDepartments();
+                    let depDisplayInfo = await queries.displayDepartments();
+                    console.table(depDisplayInfo);
+                    menu();
                     break;
                 case userOptions[6]:
-                    return console.log(data);
+                    let addedDep = await furtherQuestions.addDepartmentinq();
+                    console.log("Department Added");
+                    menu();
                     break;
                 case userOptions[7]:
                     process.exit();
-                    //return false;
             }
         });
 }
