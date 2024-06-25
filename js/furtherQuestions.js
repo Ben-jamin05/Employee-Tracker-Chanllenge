@@ -10,16 +10,16 @@ async function addDepartmentinq() {
                 name: "newDep",
             },
         ])
-        .then((data) => {
+        .then( async (data) => {
             //console.log(data);
-            newDepartment = data.newDep;
-            queries.addDepartment(newDepartment);
+            let newDepartment = data.newDep;
+            let newDepQuery = await queries.addDepartment(newDepartment);
         });
     }
 
 async function addRoleinq() {
     let departmentList = await queries.displayDepartments();
-    inquirer
+    const data = await inquirer
         .prompt([
             {
                 type: 'input',
@@ -38,17 +38,16 @@ async function addRoleinq() {
                 choices: departmentList,
             },
         ])
-        .then((data) => {
-            //console.log(data);
-            newRole = [data.newRol, data.rolSalary, data.rolDep];
-            queries.addRole(newRole);
-        });
+
+        //console.log(data);
+        let newRole = [data.newRol, data.rolSalary, data.rolDep];
+        let newRoleQuery = await queries.addRole(newRole);
     }
 
 async function updateEmpRole() {
     let roleList = await queries.displayRoles();
     let empList = await queries.getEmployeesNames();
-    inquirer
+    const data = await inquirer
         .prompt([
             {
                 type: 'list',
@@ -63,21 +62,16 @@ async function updateEmpRole() {
                 choices: roleList,
             },
         ])
-        .then((data) => {
-            //console.log(data);
-            // do something with name and roll pls
-            let empID = 0;
-            let empRoleID = 0;
-            updatedEmp = [empID, empRoleID];
-            queries.updateEmpRole(updatedEmp);
-        });
+        //console.log(data);
+        let updatedEmp = [data.empName, data.newRole];
+        let updatedEmpQuery = await queries.updateEmpRole(updatedEmp);
     }
 
 async function addEmployeeinq() {
     let roleList = await queries.displayRoles();
     let managerList = await queries.managerList();
     managerList.unshift('None');
-    inquirer
+    const data = await inquirer
         .prompt([
             {
                 type: 'input',
@@ -102,15 +96,11 @@ async function addEmployeeinq() {
                 choices: managerList,
             },
         ])
-        .then((data) => {
-            //console.log(data);
-            // do something with data.empManager for manager id
-            let manager_id = NULL;
-            newEmployee = [data.empFirst, data.empLast, data.empRole, manager_id];
-            queries.updateEmpRole(updatedEmp);
-        });
+        //console.log(data);
+        let newEmployee = [data.empFirst, data.empLast, data.empRole, data.empManager];
+        let newEmpQuery = await queries.addEmployee(newEmployee);
     }
-    
+
 
 module.exports = {addDepartmentinq, addRoleinq, addEmployeeinq,
 updateEmpRole
