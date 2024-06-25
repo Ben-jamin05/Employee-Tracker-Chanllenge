@@ -72,7 +72,7 @@ async function addEmployee(data) {
         const res = await pool.query(text, values);
         return res;
     } else {
-        const role = [data[1]];
+        const role = [data[2]];
         const roleText = 'SELECT id FROM role WHERE title = $1'
         const roleId = await pool.query(roleText, role);
 
