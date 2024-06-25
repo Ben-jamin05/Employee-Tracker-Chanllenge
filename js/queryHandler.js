@@ -58,19 +58,31 @@ async function displayDepartments() {
 }
 
 async function addEmployee(data) {
-    const manager = [data[3].split(' ')];
-    const managerText = 'SELECT manager_id FROM employee WHERE first_name = $1 AND last_name = $2';
-    const managerId = await pool.query(managerText, manager);
+    if (data[3] !== 'None') {
+        const manager = data[3].split(' ');
+        const managerText = 'SELECT id FROM employee WHERE first_name = $1 AND last_name = $2';
+        const managerId = await pool.query(managerText, manager);
 
-    const role = [data[1]];
-    const roleText = 'SELECT id FROM role WHERE title = $1'
-    const roleId = await pool.query(roleText, role);
+        const role = [data[2]];
+        const roleText = 'SELECT id FROM role WHERE title = $1'
+        const roleId = await pool.query(roleText, role);
 
-    const text = 'INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES($1, $2, $3, $4)';
-    const values = [data[0], data[1], roleId.rows[0].id, managerId.rows[0].manager_id];
-    const res = await pool.query(text, values);
-    //console.log(res)
-    return res;
+        const text = 'INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES($1, $2, $3, $4)';
+        const values = [data[0], data[1], roleId.rows[0].id, managerId.rows[0].id];
+        const res = await pool.query(text, values);
+        return res;
+    } else {
+        const role = [data[1]];
+        const roleText = 'SELECT id FROM role WHERE title = $1'
+        const roleId = await pool.query(roleText, role);
+
+        //console.log(roleId.rows[0].id);
+
+        const text = 'INSERT INTO employee(first_name, last_name, role_id) VALUES($1, $2, $3)';
+        const values = [data[0], data[1], roleId.rows[0].id];
+        const res = await pool.query(text, values);
+        return res;
+    }
 }
 
 async function addRole(data) {
